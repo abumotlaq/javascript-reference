@@ -1,0 +1,7 @@
+# Documentation
+*.md linguist-documentation=true
+docs/** linguist-documentation=true
+
+# JavaScript source
+*.js linguist-language=JavaScript
+*.js linguist-detectable=true
