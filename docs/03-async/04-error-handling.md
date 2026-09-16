@@ -1,0 +1,2376 @@
+# Error Handling
+
+Error handling is the process of detecting, controlling, and responding to problems that occur while JavaScript is running.
+
+Errors can happen for many reasons:
+
+* Invalid input
+* Missing data
+* Network failures
+* Failed API requests
+* Database failures
+* Invalid operations
+* Programming mistakes
+* Unexpected runtime conditions
+
+JavaScript provides several mechanisms for handling errors:
+
+* `try`
+* `catch`
+* `finally`
+* `throw`
+* `Error`
+* Custom error classes
+* Promise rejection handling
+* `async/await` with `try/catch`
+
+Understanding error handling is essential when working with:
+
+* APIs
+* `fetch()`
+* React
+* Next.js
+* Node.js
+* Express.js
+* Databases
+* Authentication
+* Forms
+* Asynchronous JavaScript
+
+The goal is not to hide errors.
+
+The goal is to handle failures **intentionally and predictably**.
+
+---
+
+# 1. What Is an Error?
+
+An error is a problem that prevents JavaScript from continuing normally.
+
+For example:
+
+```js
+console.log(user.name);
+```
+
+If `user` is not defined, JavaScript cannot execute this statement successfully.
+
+Another example:
+
+```js
+const result = 10 / 0;
+```
+
+This does not throw an error in JavaScript. It produces:
+
+```text
+Infinity
+```
+
+This demonstrates an important point:
+
+> Not every unexpected result is a JavaScript exception.
+
+JavaScript distinguishes between ordinary values and thrown exceptions.
+
+---
+
+# 2. Syntax Errors
+
+A syntax error occurs when JavaScript code does not follow valid JavaScript syntax.
+
+Example:
+
+```js
+const name = "Osama Abu Motlaq"
+console.log(name
+```
+
+The syntax is incomplete.
+
+The JavaScript engine cannot correctly parse the program.
+
+A syntax error usually occurs before the problematic code can execute.
+
+Example:
+
+```text
+SyntaxError
+```
+
+Syntax errors are generally fixed by correcting the source code rather than catching them with `try/catch`.
+
+---
+
+# 3. Runtime Errors
+
+A runtime error occurs while JavaScript is executing.
+
+Example:
+
+```js
+const user = undefined;
+
+console.log(user.name);
+```
+
+This causes a runtime exception.
+
+The result is typically:
+
+```text
+TypeError
+```
+
+Runtime errors can often be handled with `try/catch`.
+
+---
+
+# 4. Logical Errors
+
+A logical error occurs when the program runs but produces the wrong result.
+
+Example:
+
+```js
+function calculateTotal(price, quantity) {
+  return price + quantity;
+}
+```
+
+If the intention is:
+
+```text
+price × quantity
+```
+
+the code is logically incorrect.
+
+But JavaScript does not consider this a runtime error.
+
+The function executes successfully.
+
+This means:
+
+```text
+Syntax error
+    ↓
+Code cannot be parsed correctly
+
+Runtime error
+    ↓
+Execution encounters an exception
+
+Logical error
+    ↓
+Program runs but produces incorrect behavior
+```
+
+---
+
+# 5. Common Built-In Error Types
+
+JavaScript provides several built-in error types.
+
+Common examples include:
+
+* `Error`
+* `TypeError`
+* `ReferenceError`
+* `SyntaxError`
+* `RangeError`
+* `URIError`
+* `EvalError`
+* `AggregateError`
+
+The most commonly encountered in everyday development are:
+
+```text
+Error
+TypeError
+ReferenceError
+SyntaxError
+```
+
+---
+
+# 6. `Error`
+
+`Error` is the general-purpose error object.
+
+```js
+const error = new Error("Something went wrong");
+
+console.log(error.message);
+```
+
+Output:
+
+```text
+Something went wrong
+```
+
+An Error object commonly contains information such as:
+
+```js
+error.name
+error.message
+error.stack
+```
+
+For example:
+
+```js
+const error = new Error("Failed to load projects");
+
+console.log(error.name);
+console.log(error.message);
+console.log(error.stack);
+```
+
+---
+
+# 7. `TypeError`
+
+A `TypeError` occurs when a value is used in an inappropriate way.
+
+Example:
+
+```js
+const user = null;
+
+console.log(user.name);
+```
+
+JavaScript cannot access:
+
+```text
+name
+```
+
+from:
+
+```text
+null
+```
+
+This produces a `TypeError`.
+
+Another example:
+
+```js
+const value = 10;
+
+value();
+```
+
+A number cannot be called as a function.
+
+This also produces a `TypeError`.
+
+---
+
+# 8. `ReferenceError`
+
+A `ReferenceError` occurs when JavaScript tries to access a variable or identifier that does not exist in the accessible scope.
+
+```js
+console.log(userName);
+```
+
+If `userName` has not been declared, JavaScript throws a:
+
+```text
+ReferenceError
+```
+
+Example:
+
+```js
+console.log(osamaName);
+```
+
+if no variable named `osamaName` exists.
+
+---
+
+# 9. `RangeError`
+
+A `RangeError` occurs when a value is outside an allowed range.
+
+For example:
+
+```js
+const array = new Array(-1);
+```
+
+An array cannot have a negative length.
+
+JavaScript throws a `RangeError`.
+
+---
+
+# 10. `SyntaxError`
+
+A `SyntaxError` indicates invalid JavaScript syntax.
+
+You can also create one manually:
+
+```js
+throw new SyntaxError("Invalid syntax");
+```
+
+However, most syntax errors encountered during development are generated by the JavaScript parser itself.
+
+---
+
+# 11. The `throw` Statement
+
+The `throw` statement allows you to create your own exception.
+
+```js
+throw new Error("Something went wrong");
+```
+
+Once JavaScript reaches `throw`, normal execution stops for that control flow unless the exception is caught.
+
+For example:
+
+```js
+console.log("Before");
+
+throw new Error("Something went wrong");
+
+console.log("After");
+```
+
+Output:
+
+```text
+Before
+```
+
+`"After"` is never executed.
+
+---
+
+# 12. Throwing a Custom Message
+
+You can throw an Error with a meaningful message.
+
+```js
+function validateName(name) {
+  if (!name) {
+    throw new Error("Name is required");
+  }
+
+  return name;
+}
+```
+
+Now:
+
+```js
+validateName("");
+```
+
+throws:
+
+```text
+Error: Name is required
+```
+
+This is useful for enforcing application rules.
+
+---
+
+# 13. Throwing an Error Object
+
+Prefer:
+
+```js
+throw new Error("Invalid user data");
+```
+
+rather than:
+
+```js
+throw "Invalid user data";
+```
+
+Although JavaScript technically allows throwing almost any value:
+
+```js
+throw "Something went wrong";
+throw 404;
+throw false;
+```
+
+throwing an `Error` object is strongly preferred.
+
+Why?
+
+Because Error objects provide structured information such as:
+
+```js
+error.name
+error.message
+error.stack
+```
+
+Therefore:
+
+```js
+throw new Error("Something went wrong");
+```
+
+is the professional pattern.
+
+---
+
+# 14. The `try` Block
+
+The `try` block contains code that may throw an exception.
+
+```js
+try {
+  const result = riskyOperation();
+
+  console.log(result);
+}
+```
+
+By itself, `try` is normally paired with:
+
+```text
+catch
+```
+
+or:
+
+```text
+finally
+```
+
+A complete pattern is:
+
+```js
+try {
+  // Code that may fail
+} catch (error) {
+  // Handle the error
+}
+```
+
+---
+
+# 15. The `catch` Block
+
+The `catch` block executes when an exception occurs inside the associated `try` block.
+
+```js
+try {
+  throw new Error("Something went wrong");
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+Output:
+
+```text
+Something went wrong
+```
+
+The error object is available through:
+
+```js
+error
+```
+
+---
+
+# 16. How `try/catch` Works
+
+Consider:
+
+```js
+try {
+  console.log("A");
+
+  throw new Error("Failed");
+
+  console.log("B");
+} catch (error) {
+  console.log("C");
+}
+```
+
+Output:
+
+```text
+A
+C
+```
+
+Execution works like this:
+
+```text
+Enter try
+   ↓
+"A"
+   ↓
+throw Error
+   ↓
+Stop try block
+   ↓
+Enter catch
+   ↓
+"C"
+```
+
+The statement after `throw` inside the `try` block does not execute.
+
+---
+
+# 17. Catching a Runtime Error
+
+```js
+try {
+  const user = null;
+
+  console.log(user.name);
+} catch (error) {
+  console.error("An error occurred");
+}
+```
+
+Instead of terminating that control flow without a handler, the exception is caught.
+
+You can inspect it:
+
+```js
+try {
+  const user = null;
+
+  console.log(user.name);
+} catch (error) {
+  console.error(error.name);
+  console.error(error.message);
+}
+```
+
+---
+
+# 18. The `error` Parameter
+
+The parameter in:
+
+```js
+catch (error)
+```
+
+contains the thrown value.
+
+Usually, when throwing an `Error`, it is an Error object.
+
+Example:
+
+```js
+try {
+  throw new Error("Failed to load data");
+} catch (error) {
+  console.log(error.name);
+  console.log(error.message);
+}
+```
+
+Output:
+
+```text
+Error
+Failed to load data
+```
+
+---
+
+# 19. Optional Catch Binding
+
+If you do not need the error object, you can omit the parameter.
+
+```js
+try {
+  riskyOperation();
+} catch {
+  console.log("Operation failed");
+}
+```
+
+This is called **optional catch binding**.
+
+Use it when the actual error information is unnecessary.
+
+If you need:
+
+```js
+error.message
+```
+
+then use:
+
+```js
+catch (error)
+```
+
+---
+
+# 20. The `finally` Block
+
+The `finally` block runs after the `try`/`catch` process regardless of whether an error occurred.
+
+```js
+try {
+  console.log("Trying");
+} catch (error) {
+  console.log("Error");
+} finally {
+  console.log("Finished");
+}
+```
+
+Output:
+
+```text
+Trying
+Finished
+```
+
+If an error occurs:
+
+```js
+try {
+  throw new Error("Failed");
+} catch (error) {
+  console.log("Error");
+} finally {
+  console.log("Finished");
+}
+```
+
+Output:
+
+```text
+Error
+Finished
+```
+
+---
+
+# 21. Why Use `finally`?
+
+`finally` is useful for cleanup operations.
+
+Examples:
+
+* Resetting loading state
+* Closing a resource
+* Releasing a lock
+* Stopping a timer
+* Cleaning temporary state
+
+Example:
+
+```js
+async function loadProjects() {
+  setLoading(true);
+
+  try {
+    const projects = await getProjects();
+
+    setProjects(projects);
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+}
+```
+
+Whether the request succeeds or fails:
+
+```js
+setLoading(false);
+```
+
+still runs.
+
+---
+
+# 22. `try/catch/finally` Flow
+
+The general flow is:
+
+```text
+             try
+              │
+       ┌──────┴──────┐
+       │             │
+    success        error
+       │             │
+       │           catch
+       │             │
+       └──────┬──────┘
+              ↓
+           finally
+```
+
+This is one of the most important control-flow structures for error handling.
+
+---
+
+# 23. Nested `try/catch`
+
+`try/catch` blocks can be nested.
+
+```js
+try {
+  try {
+    throw new Error("Inner error");
+  } catch (error) {
+    console.log("Inner:", error.message);
+  }
+} catch (error) {
+  console.log("Outer:", error.message);
+}
+```
+
+The inner `catch` handles the error.
+
+Therefore, the outer `catch` does not execute.
+
+---
+
+# 24. Rethrowing an Error
+
+Sometimes you catch an error but cannot fully handle it.
+
+You can rethrow it:
+
+```js
+try {
+  riskyOperation();
+} catch (error) {
+  console.error("Logging error:", error);
+
+  throw error;
+}
+```
+
+Now another layer can handle it.
+
+This is called **rethrowing**.
+
+It is useful when you want to:
+
+1. Log or enrich the error.
+2. Preserve the failure.
+3. Allow a higher-level layer to decide what to do.
+
+---
+
+# 25. Error Propagation
+
+If an error is not caught in the current function, it can propagate to the caller.
+
+Example:
+
+```js
+function getProjects() {
+  throw new Error("Failed to load projects");
+}
+
+function loadDashboard() {
+  getProjects();
+}
+
+try {
+  loadDashboard();
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+The error travels through:
+
+```text
+getProjects()
+     ↓
+loadDashboard()
+     ↓
+caller
+     ↓
+catch
+```
+
+This is called **error propagation**.
+
+---
+
+# 26. Error Propagation in Functions
+
+Consider:
+
+```js
+function validateUser(name) {
+  if (!name) {
+    throw new Error("Name is required");
+  }
+}
+
+function createUser(name) {
+  validateUser(name);
+
+  console.log("User created");
+}
+
+try {
+  createUser("");
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+The error originates in:
+
+```js
+validateUser()
+```
+
+but is handled by the caller:
+
+```js
+catch
+```
+
+This allows lower-level functions to report failure while higher-level code decides how to respond.
+
+---
+
+# 27. Errors in Asynchronous Code
+
+Error handling becomes especially important with Promises.
+
+A rejected Promise represents an asynchronous failure.
+
+Example:
+
+```js
+const promise = Promise.reject(
+  new Error("Request failed")
+);
+
+promise.catch((error) => {
+  console.error(error.message);
+});
+```
+
+The Promise is rejected, and `.catch()` handles the rejection.
+
+---
+
+# 28. `.catch()` and Promise Rejections
+
+Promise-based code can handle errors using:
+
+```js
+.catch()
+```
+
+Example:
+
+```js
+getProjects()
+  .then((projects) => {
+    console.log(projects);
+  })
+  .catch((error) => {
+    console.error("Failed:", error);
+  });
+```
+
+The `.catch()` handles a rejection from the Promise chain.
+
+---
+
+# 29. Errors Inside `.then()`
+
+An error thrown inside a `.then()` callback becomes a rejected Promise.
+
+```js
+getProjects()
+  .then((projects) => {
+    throw new Error("Processing failed");
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
+```
+
+Output:
+
+```text
+Processing failed
+```
+
+This is one of the reasons Promise chains have predictable error propagation.
+
+---
+
+# 30. `async/await` Error Handling
+
+With `async/await`, Promise rejections can be handled using `try/catch`.
+
+```js
+async function loadProjects() {
+  try {
+    const projects = await getProjects();
+
+    console.log(projects);
+  } catch (error) {
+    console.error("Failed:", error);
+  }
+}
+```
+
+If:
+
+```js
+getProjects()
+```
+
+returns a rejected Promise, the `await` expression causes control to move to:
+
+```js
+catch
+```
+
+---
+
+# 31. `throw` Inside an Async Function
+
+An error thrown inside an `async` function causes its returned Promise to reject.
+
+```js
+async function loadProjects() {
+  throw new Error("Failed to load projects");
+}
+```
+
+The caller can handle it:
+
+```js
+loadProjects().catch((error) => {
+  console.error(error.message);
+});
+```
+
+Or:
+
+```js
+async function run() {
+  try {
+    await loadProjects();
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+```
+
+---
+
+# 32. Async Error Propagation
+
+Consider:
+
+```js
+async function getProjects() {
+  throw new Error("Database unavailable");
+}
+
+async function loadDashboard() {
+  const projects = await getProjects();
+
+  return projects;
+}
+
+async function run() {
+  try {
+    const projects = await loadDashboard();
+
+    console.log(projects);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+```
+
+The error travels:
+
+```text
+getProjects()
+      ↓
+loadDashboard()
+      ↓
+run()
+      ↓
+catch
+```
+
+This is Promise rejection propagation expressed through `async/await`.
+
+---
+
+# 33. Handling Multiple Errors
+
+You can use different validation conditions and throw meaningful errors.
+
+```js
+function createProject(title) {
+  if (!title) {
+    throw new Error("Project title is required");
+  }
+
+  if (title.length < 3) {
+    throw new Error("Project title is too short");
+  }
+
+  return {
+    title,
+  };
+}
+```
+
+Now:
+
+```js
+try {
+  const project = createProject("");
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+Output:
+
+```text
+Project title is required
+```
+
+Meaningful errors make debugging easier.
+
+---
+
+# 34. Conditional Error Handling
+
+Sometimes different error types require different responses.
+
+```js
+try {
+  riskyOperation();
+} catch (error) {
+  if (error instanceof TypeError) {
+    console.error("Type problem");
+  } else if (error instanceof RangeError) {
+    console.error("Range problem");
+  } else {
+    console.error("Unknown error");
+  }
+}
+```
+
+This is useful when your application needs different recovery strategies.
+
+---
+
+# 35. `instanceof Error`
+
+You can check whether a value is an Error object:
+
+```js
+try {
+  riskyOperation();
+} catch (error) {
+  if (error instanceof Error) {
+    console.error(error.message);
+  }
+}
+```
+
+This can be useful when dealing with code where the thrown value is not guaranteed to be a standard Error object.
+
+---
+
+# 36. Custom Error Classes
+
+JavaScript allows you to create custom error types.
+
+```js
+class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+
+    this.name = "ValidationError";
+  }
+}
+```
+
+Now:
+
+```js
+throw new ValidationError("Name is required");
+```
+
+You can detect it:
+
+```js
+try {
+  throw new ValidationError("Name is required");
+} catch (error) {
+  if (error instanceof ValidationError) {
+    console.error("Validation problem:", error.message);
+  }
+}
+```
+
+---
+
+# 37. Why Use Custom Errors?
+
+Custom errors are useful when your application has different categories of failure.
+
+For example:
+
+```text
+ValidationError
+AuthenticationError
+AuthorizationError
+NotFoundError
+DatabaseError
+```
+
+Then higher-level code can respond differently.
+
+For example:
+
+```js
+if (error instanceof ValidationError) {
+  // Return validation feedback
+}
+
+if (error instanceof NotFoundError) {
+  // Return a not-found response
+}
+```
+
+This becomes particularly useful in backend applications.
+
+---
+
+# 38. Custom Error with Additional Information
+
+A custom error can store additional properties.
+
+```js
+class HttpError extends Error {
+  constructor(message, status) {
+    super(message);
+
+    this.name = "HttpError";
+    this.status = status;
+  }
+}
+```
+
+Usage:
+
+```js
+throw new HttpError("Project not found", 404);
+```
+
+Then:
+
+```js
+try {
+  throw new HttpError("Project not found", 404);
+} catch (error) {
+  console.log(error.message);
+  console.log(error.status);
+}
+```
+
+Output:
+
+```text
+Project not found
+404
+```
+
+---
+
+# 39. Error Handling with `fetch()`
+
+A common API pattern is:
+
+```js
+async function getProjects() {
+  const response = await fetch("/api/projects");
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+```
+
+Then:
+
+```js
+async function loadProjects() {
+  try {
+    const projects = await getProjects();
+
+    console.log(projects);
+  } catch (error) {
+    console.error("Could not load projects:", error.message);
+  }
+}
+```
+
+The responsibilities are separated:
+
+```text
+getProjects()
+    ↓
+Detect API failure
+    ↓
+Throw error
+
+loadProjects()
+    ↓
+Decide how to handle failure
+```
+
+---
+
+# 40. Validation Errors
+
+Error handling is not only about network failures.
+
+Input validation is another major use case.
+
+```js
+function validateProject(project) {
+  if (!project.title) {
+    throw new Error("Project title is required");
+  }
+
+  if (!project.description) {
+    throw new Error("Project description is required");
+  }
+
+  return true;
+}
+```
+
+Then:
+
+```js
+try {
+  validateProject({
+    title: "",
+    description: "A project",
+  });
+} catch (error) {
+  console.error(error.message);
+}
+```
+
+---
+
+# 41. Error Handling in Forms
+
+A form submission may involve several possible failures:
+
+```text
+User input
+    ↓
+Validation
+    ↓
+API request
+    ↓
+Server validation
+    ↓
+Database operation
+```
+
+Each layer may fail.
+
+A structured approach is:
+
+```js
+async function submitProject(project) {
+  try {
+    validateProject(project);
+
+    const response = await fetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify(project),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create project");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Submission failed:", error);
+
+    throw error;
+  }
+}
+```
+
+The UI can then decide how to display the failure.
+
+---
+
+# 42. Error Handling in React
+
+In React, asynchronous operations often need error state.
+
+Example:
+
+```js
+const [error, setError] = useState(null);
+
+useEffect(() => {
+  async function loadProjects() {
+    try {
+      const projects = await getProjects();
+
+      setProjects(projects);
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
+  loadProjects();
+}, []);
+```
+
+The important pattern is:
+
+```text
+async operation
+      ↓
+try
+      ↓
+success → update data
+      ↓
+failure → update error state
+```
+
+The component can then render an appropriate error message.
+
+---
+
+# 43. Error Boundaries in React
+
+React also has a concept called an **Error Boundary**.
+
+Error Boundaries are designed primarily to catch errors during rendering and certain React lifecycle-related operations in a component tree.
+
+They are different from:
+
+```js
+try/catch
+```
+
+and they do not replace ordinary asynchronous error handling.
+
+For example, an error from:
+
+```js
+await fetchData();
+```
+
+still needs to be handled through the Promise/async mechanism.
+
+Therefore:
+
+```text
+try/catch
+    ↓
+JavaScript operation errors
+
+Error Boundary
+    ↓
+React rendering/component-tree errors
+```
+
+These are related but different mechanisms.
+
+---
+
+# 44. Error Handling in Node.js
+
+Error handling is critical in Node.js because backend applications deal with:
+
+* HTTP requests
+* Databases
+* File systems
+* Authentication
+* External APIs
+* Network connections
+
+Example:
+
+```js
+async function getProjects() {
+  try {
+    const result = await database.query(
+      "SELECT * FROM projects"
+    );
+
+    return result.rows;
+  } catch (error) {
+    console.error("Database error:", error);
+
+    throw error;
+  }
+}
+```
+
+The database layer detects or receives the failure.
+
+A higher layer can decide how the HTTP response should be handled.
+
+---
+
+# 45. Never Expose Sensitive Error Details
+
+Suppose a database produces an internal error:
+
+```text
+Database connection failed:
+host=internal-db
+user=admin
+password=...
+```
+
+This information should not be sent directly to users.
+
+Bad:
+
+```js
+return response.status(500).json({
+  error: error.message,
+});
+```
+
+if `error.message` may contain sensitive internal details.
+
+Prefer a safe public message:
+
+```js
+return response.status(500).json({
+  error: "Internal server error",
+});
+```
+
+Log detailed information internally when appropriate.
+
+The principle is:
+
+```text
+Internal error details
+        ↓
+Server logs / monitoring
+
+Safe public message
+        ↓
+Client
+```
+
+---
+
+# 46. Error Handling and Security
+
+Poor error handling can reveal:
+
+* Database structure
+* File paths
+* Internal service names
+* Stack traces
+* Authentication details
+* Environment information
+* Sensitive configuration
+
+Therefore, error handling is also a security concern.
+
+In production applications:
+
+> Log useful diagnostic information internally, but expose only information that the client needs.
+
+---
+
+# 47. Logging Errors
+
+A simple approach:
+
+```js
+try {
+  await loadData();
+} catch (error) {
+  console.error(error);
+}
+```
+
+For production systems, applications may use dedicated monitoring/logging systems.
+
+The important principle is that logs should help developers answer:
+
+* What failed?
+* Where did it fail?
+* When did it fail?
+* What operation was being performed?
+* What context is useful for debugging?
+
+Avoid logging secrets such as:
+
+* Passwords
+* API keys
+* Access tokens
+* Private credentials
+
+---
+
+# 48. Error Handling vs Error Prevention
+
+Good software does both.
+
+### Prevention
+
+Validate input:
+
+```js
+if (!email) {
+  throw new Error("Email is required");
+}
+```
+
+### Handling
+
+Catch the resulting failure:
+
+```js
+try {
+  createUser(data);
+} catch (error) {
+  displayError(error.message);
+}
+```
+
+The ideal system is:
+
+```text
+Validate
+   ↓
+Prevent invalid operations
+   ↓
+Handle failures that still occur
+```
+
+---
+
+# 49. Do Not Use `try/catch` Everywhere
+
+This is unnecessarily noisy:
+
+```js
+function add(a, b) {
+  try {
+    return a + b;
+  } catch (error) {
+    console.error(error);
+  }
+}
+```
+
+There is usually no meaningful error handling here.
+
+`try/catch` should have a purpose.
+
+Use it when you can:
+
+* Recover
+* Provide a fallback
+* Convert an error into another form
+* Add useful context
+* Log appropriately
+* Report the failure
+* Clean up resources
+
+---
+
+# 50. Do Not Swallow Errors
+
+A swallowed error is an error that is caught and effectively ignored.
+
+Bad:
+
+```js
+try {
+  await loadProjects();
+} catch (error) {
+}
+```
+
+Now the failure disappears.
+
+This can make debugging extremely difficult.
+
+If you intentionally ignore an error, there should be a clear reason.
+
+Otherwise, handle it or propagate it.
+
+---
+
+# 51. Do Not Replace Useful Errors with Generic Ones Too Early
+
+Consider:
+
+```js
+try {
+  await saveProject();
+} catch {
+  throw new Error("Something went wrong");
+}
+```
+
+This may destroy useful context.
+
+A better approach may be:
+
+```js
+try {
+  await saveProject();
+} catch (error) {
+  throw new Error("Failed to save project", {
+    cause: error,
+  });
+}
+```
+
+Modern JavaScript supports the `cause` option for preserving the underlying reason.
+
+---
+
+# 52. The `cause` Property
+
+Example:
+
+```js
+try {
+  await databaseOperation();
+} catch (error) {
+  throw new Error("Failed to load projects", {
+    cause: error,
+  });
+}
+```
+
+Now:
+
+```js
+catch (error) {
+  console.log(error.message);
+  console.log(error.cause);
+}
+```
+
+The outer error provides useful application-level context while preserving the original cause.
+
+Conceptually:
+
+```text
+Original error
+      ↓
+Database failure
+      ↓
+Wrapped error
+      ↓
+"Failed to load projects"
+```
+
+This is useful for layered applications.
+
+---
+
+# 53. `Promise.all()` Error Handling
+
+When using:
+
+```js
+const results = await Promise.all([
+  getProjects(),
+  getPosts(),
+  getStatistics(),
+]);
+```
+
+if one Promise rejects, the `Promise.all()` result rejects.
+
+You can handle it:
+
+```js
+try {
+  const [projects, posts, statistics] = await Promise.all([
+    getProjects(),
+    getPosts(),
+    getStatistics(),
+  ]);
+} catch (error) {
+  console.error("Dashboard loading failed:", error);
+}
+```
+
+This is appropriate when all operations are required for successful completion.
+
+---
+
+# 54. `Promise.allSettled()` for Independent Failures
+
+If you want every result regardless of individual failures:
+
+```js
+const results = await Promise.allSettled([
+  getProjects(),
+  getPosts(),
+  getStatistics(),
+]);
+```
+
+Now one failure does not prevent the other results from being reported.
+
+This is useful for dashboards or systems where partial success is acceptable.
+
+---
+
+# 55. `Promise.race()` and Errors
+
+`Promise.race()` settles when the first Promise settles.
+
+Therefore, the first result can be a rejection.
+
+```js
+try {
+  const result = await Promise.race([
+    slowRequest(),
+    timeout(),
+  ]);
+
+  console.log(result);
+} catch (error) {
+  console.error("Operation failed or timed out");
+}
+```
+
+This pattern is commonly used when implementing timeouts.
+
+---
+
+# 56. Handling Errors at the Correct Layer
+
+A strong architecture separates responsibilities.
+
+For example:
+
+```text
+Database layer
+    ↓
+Detect database failure
+
+Service layer
+    ↓
+Apply business rules
+
+API layer
+    ↓
+Convert failure into HTTP response
+
+Frontend
+    ↓
+Display appropriate user feedback
+```
+
+A database error should not necessarily be directly shown to the user.
+
+Each layer should decide what information and behavior are appropriate.
+
+---
+
+# 57. Errors Are Part of Program Design
+
+A mature application does not only define:
+
+```text
+What happens when everything works?
+```
+
+It also defines:
+
+```text
+What happens when the request fails?
+What happens when input is invalid?
+What happens when the database is unavailable?
+What happens when authentication fails?
+What happens when data is missing?
+What happens when an external API times out?
+```
+
+Error handling should therefore be considered during application design, not added only after something breaks.
+
+---
+
+# 58. Common Mistakes
+
+## Mistake 1: Throwing Strings
+
+Avoid:
+
+```js
+throw "Failed";
+```
+
+Prefer:
+
+```js
+throw new Error("Failed");
+```
+
+---
+
+## Mistake 2: Empty `catch`
+
+Avoid:
+
+```js
+try {
+  operation();
+} catch (error) {
+}
+```
+
+unless intentionally ignoring the failure.
+
+---
+
+## Mistake 3: Logging and Hiding the Error
+
+Potentially problematic:
+
+```js
+try {
+  await operation();
+} catch (error) {
+  console.error(error);
+}
+```
+
+If the caller expects the operation to fail, consider rethrowing:
+
+```js
+try {
+  await operation();
+} catch (error) {
+  console.error(error);
+
+  throw error;
+}
+```
+
+---
+
+## Mistake 4: Assuming `fetch()` Rejects on `404`
+
+This is incorrect:
+
+```js
+try {
+  const response = await fetch("/missing-page");
+
+  const data = await response.json();
+} catch (error) {
+  // May not execute just because the server returned 404
+}
+```
+
+Check:
+
+```js
+if (!response.ok) {
+  throw new Error(`HTTP ${response.status}`);
+}
+```
+
+---
+
+## Mistake 5: Catching Too Early
+
+Catching an error at a low level can prevent higher-level code from deciding how to handle it.
+
+Only catch where you have a meaningful action.
+
+---
+
+## Mistake 6: Exposing Internal Errors
+
+Do not blindly send:
+
+```js
+error.stack
+```
+
+or sensitive `error.message` values to clients.
+
+---
+
+## Mistake 7: Using Errors for Normal Control Flow
+
+Do not use exceptions as a replacement for ordinary conditions.
+
+Instead of:
+
+```js
+try {
+  findUser();
+} catch {
+  // user does not exist
+}
+```
+
+if "user does not exist" is an expected result, it may be better for the API/function to return a clear result such as:
+
+```js
+null
+```
+
+depending on the design.
+
+Errors are better suited to exceptional or failed operations.
+
+---
+
+# 59. Best Practices
+
+## 1. Throw `Error` Objects
+
+Prefer:
+
+```js
+throw new Error("Something failed");
+```
+
+---
+
+## 2. Use Meaningful Messages
+
+Prefer:
+
+```js
+throw new Error("Project title is required");
+```
+
+over:
+
+```js
+throw new Error("Error");
+```
+
+---
+
+## 3. Catch Errors Where You Can Handle Them
+
+Do not catch merely because you can.
+
+---
+
+## 4. Preserve Useful Context
+
+Use error causes when wrapping lower-level errors:
+
+```js
+throw new Error("Failed to load projects", {
+  cause: error,
+});
+```
+
+---
+
+## 5. Validate Early
+
+Reject invalid input before performing expensive operations.
+
+---
+
+## 6. Do Not Expose Sensitive Details
+
+Keep internal diagnostics separate from public error messages.
+
+---
+
+## 7. Use `finally` for Cleanup
+
+For example:
+
+```js
+try {
+  await operation();
+} finally {
+  cleanup();
+}
+```
+
+---
+
+## 8. Propagate Errors When Appropriate
+
+If the current layer cannot make a meaningful decision, allow the error to move upward.
+
+---
+
+## 9. Distinguish Expected Conditions from Exceptions
+
+Not every unsuccessful condition requires throwing an exception.
+
+---
+
+## 10. Design Error Handling Deliberately
+
+Think about failure scenarios while designing the feature.
+
+---
+
+# 60. Quick Reference
+
+| Mechanism             | Purpose                                        |
+| --------------------- | ---------------------------------------------- |
+| `throw`               | Creates/raises an exception                    |
+| `try`                 | Contains code that may fail                    |
+| `catch`               | Handles an exception                           |
+| `finally`             | Runs after `try`/`catch`                       |
+| `Error`               | General error object                           |
+| `TypeError`           | Invalid type/value operation                   |
+| `ReferenceError`      | Missing/unavailable identifier                 |
+| `SyntaxError`         | Invalid JavaScript syntax                      |
+| `RangeError`          | Value outside allowed range                    |
+| `instanceof`          | Checks an object's type/prototype relationship |
+| `.catch()`            | Handles Promise rejection                      |
+| `try/catch` + `await` | Handles async failures                         |
+| `cause`               | Preserves an underlying error                  |
+
+---
+
+# 61. Error Handling Mental Model
+
+Think of error handling as a flow:
+
+```text
+Operation
+    ↓
+Can it fail?
+    ↓
+   Yes
+    ↓
+Detect failure
+    ↓
+throw / reject
+    ↓
+Propagate
+    ↓
+Find appropriate handler
+    ↓
+Recover / report / transform / rethrow
+    ↓
+Continue or terminate intentionally
+```
+
+The important part is that errors should have an intentional destination.
+
+---
+
+# 62. Synchronous vs Asynchronous Error Handling
+
+### Synchronous
+
+```js
+try {
+  const result = riskyOperation();
+
+  console.log(result);
+} catch (error) {
+  console.error(error);
+}
+```
+
+### Promise
+
+```js
+riskyOperation()
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+```
+
+### Async/Await
+
+```js
+async function run() {
+  try {
+    const result = await riskyOperation();
+
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+```
+
+These represent different ways of handling failures depending on the execution model.
+
+---
+
+# 63. The Relationship Between Errors and Promises
+
+A Promise has two important successful/failure outcomes:
+
+```text
+Promise
+   ↙    ↘
+fulfilled  rejected
+```
+
+A rejected Promise can be handled with:
+
+```js
+.catch()
+```
+
+or:
+
+```js
+try {
+  await promise;
+} catch (error) {
+  // Handle rejection
+}
+```
+
+Therefore:
+
+```text
+Promise rejection
+       ↓
+await
+       ↓
+catch
+```
+
+This is why understanding Promise rejection is essential for understanding asynchronous error handling.
+
+---
+
+# 64. Complete Async Error Handling Example
+
+Here is a practical example combining the concepts:
+
+```js
+async function loadProjects() {
+  try {
+    const response = await fetch("/api/projects");
+
+    if (!response.ok) {
+      throw new Error(`Request failed: ${response.status}`);
+    }
+
+    const projects = await response.json();
+
+    return projects;
+  } catch (error) {
+    console.error("Failed to load projects:", error);
+
+    throw new Error("Unable to load projects", {
+      cause: error,
+    });
+  }
+}
+```
+
+A higher-level function can handle the public behavior:
+
+```js
+async function displayProjects() {
+  try {
+    const projects = await loadProjects();
+
+    console.log(projects);
+  } catch (error) {
+    console.error("Please try again later.");
+  }
+}
+```
+
+The architecture is:
+
+```text
+fetch()
+   ↓
+HTTP validation
+   ↓
+throw original failure
+   ↓
+loadProjects()
+   ↓
+add application context
+   ↓
+rethrow
+   ↓
+displayProjects()
+   ↓
+user-facing response
+```
+
+This is much better than allowing every layer to independently print or expose raw errors.
+
+---
+
+# 65. Error Handling Checklist
+
+When implementing an asynchronous operation, ask:
+
+```text
+[ ] What can fail?
+[ ] How is failure detected?
+[ ] Should I throw an Error?
+[ ] Where should the error be handled?
+[ ] Should the error propagate?
+[ ] Do I need cleanup in finally?
+[ ] Should I preserve the original error as cause?
+[ ] Could the error contain sensitive information?
+[ ] Should the user see the actual error message?
+[ ] Is this really an exception or an expected condition?
+```
+
+This checklist is useful when building APIs, React applications, and backend services.
+
+---
+
+# 66. Key Takeaways
+
+1. JavaScript has syntax, runtime, and logical errors.
+2. `Error` is the standard object for representing exceptions.
+3. `throw` raises an exception.
+4. `try` contains code that may fail.
+5. `catch` handles an exception.
+6. `finally` executes after the `try`/`catch` process.
+7. Errors can propagate through function calls.
+8. Errors can be rethrown when a lower-level function cannot fully handle them.
+9. Promise rejection is the asynchronous equivalent of a failed operation.
+10. `.catch()` handles Promise rejection.
+11. `async/await` uses `try/catch` to handle rejected Promises.
+12. `fetch()` requires an explicit `response.ok` check for HTTP failure statuses.
+13. Custom Error classes can represent meaningful application-specific failure types.
+14. `Error.cause` can preserve the underlying error when adding context.
+15. Error handling should happen at the layer that has enough context to make a meaningful decision.
+16. Errors should not be silently swallowed.
+17. Internal error details should not automatically be exposed to users.
+18. Not every unsuccessful condition should be represented as an exception.
+19. Good error handling is part of application architecture and security.
+20. The purpose of error handling is not to hide failures but to make failure behavior predictable and manageable.
+
+---
+
+# 67. Final Mental Model
+
+The complete asynchronous JavaScript error flow is:
+
+```text
+                    Operation
+                        ↓
+                  Can it fail?
+                        ↓
+                  ┌─────┴─────┐
+                  │           │
+                Success      Failure
+                  │           │
+                  │       throw / reject
+                  │           │
+                  │       propagate
+                  │           ↓
+                  │     appropriate handler
+                  │           │
+                  │    ┌──────┴──────┐
+                  │    │             │
+                  │  recover       rethrow
+                  │    │             │
+                  └────┴──────┬──────┘
+                              ↓
+                           finally
+                              ↓
+                         continue safely
+```
+
+For asynchronous JavaScript:
+
+```text
+Promise
+   ↓
+fulfilled → continue
+   ↓
+rejected → catch
+```
+
+With `async/await`:
+
+```js
+try {
+  const data = await operation();
+} catch (error) {
+  // Handle failure
+} finally {
+  // Cleanup
+}
+```
+
+And for application architecture:
+
+```text
+Detect failure
+      ↓
+Create meaningful error
+      ↓
+Propagate when necessary
+      ↓
+Handle at the correct layer
+      ↓
+Give the user a safe response
+      ↓
+Keep diagnostic details internal
+```
+
+That is the core of professional JavaScript error handling.

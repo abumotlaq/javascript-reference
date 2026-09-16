@@ -1,0 +1,18 @@
+{
+"name": "javascript-reference",
+"version": "0.1.0",
+"description": "A structured and practical JavaScript reference covering fundamentals, functions, asynchronous JavaScript, OOP, ES6+ features, DOM, BOM, and browser APIs.",
+"type": "module",
+"keywords": [
+"javascript",
+"ecmascript",
+"web-development",
+"dom",
+"bom",
+"web-apis",
+"javascript-reference",
+"javascript-learning"
+],
+"author": "Osama Abu Motlaq",
+"license": "MIT"
+}
