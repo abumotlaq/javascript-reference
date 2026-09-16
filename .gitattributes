@@ -1,8 +1,0 @@
-# Treat Markdown files as documentation.
-*.md linguist-documentation=true
-
-# Treat the documentation directory as documentation.
-docs/** linguist-documentation=true
-
-# Include JavaScript files in language statistics.
-*.js linguist-detectable=true
