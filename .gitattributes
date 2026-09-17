@@ -3,5 +3,4 @@
 docs/** linguist-documentation=true
 
 # JavaScript source
-*.js linguist-language=JavaScript
-*.js linguist-detectable=true
+examples/**/*.js linguist-documentation=false linguist-language=JavaScript linguist-detectable=true
