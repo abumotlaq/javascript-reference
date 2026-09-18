@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta
+    name="description"
+    content="A multiple-choice quiz application built with vanilla JavaScript."
+  >
+  <title>Quiz App</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <section class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">JavaScript Project</p>
+
+          <h1>JavaScript Quiz</h1>
+
+          <p class="subtitle">
+            Test your JavaScript knowledge.
+          </p>
+        </div>
+
+        <div
+          id="timer"
+          class="timer"
+          aria-live="polite"
+        >
+          30s
+        </div>
+      </header>
+
+      <div class="progress-section">
+        <div class="progress-info">
+          <span id="questionNumber">
+            Question 1 of 1
+          </span>
+
+          <span id="score">
+            Score: 0
+          </span>
+        </div>
+
+        <div
+          class="progress-track"
+          aria-hidden="true"
+        >
+          <div
+            id="progressBar"
+            class="progress-bar"
+          ></div>
+        </div>
+      </div>
+
+      <section
+        id="quizSection"
+        class="quiz-section"
+        aria-labelledby="question"
+      >
+        <p class="question-label">
+          Question
+        </p>
+
+        <h2 id="question">
+          Loading question...
+        </h2>
+
+        <div
+          id="answers"
+          class="answers"
+          role="group"
+          aria-label="Answer choices"
+        ></div>
+
+        <p
+          id="feedback"
+          class="feedback"
+          aria-live="polite"
+          hidden
+        ></p>
+
+        <div class="quiz-actions">
+          <button
+            id="nextButton"
+            type="button"
+            class="primary-button"
+            disabled
+          >
+            Next Question
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="resultSection"
+        class="result-section"
+        aria-labelledby="resultTitle"
+        hidden
+      >
+        <div class="result-icon" aria-hidden="true">
+          ✓
+        </div>
+
+        <p class="eyebrow">
+          Quiz Complete
+        </p>
+
+        <h2 id="resultTitle">
+          Your Result
+        </h2>
+
+        <p id="resultMessage">
+          -
+        </p>
+
+        <div class="result-summary">
+          <div class="result-card">
+            <span>Score</span>
+            <strong id="finalScore">0 / 0</strong>
+          </div>
+
+          <div class="result-card">
+            <span>Percentage</span>
+            <strong id="finalPercentage">0%</strong>
+          </div>
+        </div>
+
+        <button
+          id="restartButton"
+          type="button"
+          class="primary-button restart-button"
+        >
+          Restart Quiz
+        </button>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

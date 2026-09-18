@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="container">
+    <section class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">JavaScript Project</p>
+          <h1>Task Manager</h1>
+          <p class="subtitle">
+            Manage your tasks with vanilla JavaScript.
+          </p>
+        </div>
+
+        <div class="stats" aria-label="Task statistics">
+          <div class="stat">
+            <span id="totalTasks">0</span>
+            <small>Total</small>
+          </div>
+
+          <div class="stat">
+            <span id="activeTasks">0</span>
+            <small>Active</small>
+          </div>
+
+          <div class="stat">
+            <span id="completedTasks">0</span>
+            <small>Completed</small>
+          </div>
+        </div>
+      </header>
+
+      <form id="taskForm" class="task-form">
+        <label class="sr-only" for="taskInput">
+          Task title
+        </label>
+
+        <input
+          id="taskInput"
+          name="task"
+          type="text"
+          placeholder="Enter a new task..."
+          maxlength="120"
+          autocomplete="off"
+        >
+
+        <button type="submit">Add Task</button>
+      </form>
+
+      <p id="formError" class="form-error" role="alert" hidden></p>
+
+      <div class="toolbar">
+        <div class="filters" role="group" aria-label="Task filters">
+          <button
+            type="button"
+            class="filter-button active"
+            data-filter="all"
+          >
+            All
+          </button>
+
+          <button
+            type="button"
+            class="filter-button"
+            data-filter="active"
+          >
+            Active
+          </button>
+
+          <button
+            type="button"
+            class="filter-button"
+            data-filter="completed"
+          >
+            Completed
+          </button>
+        </div>
+
+        <button
+          id="clearCompleted"
+          type="button"
+          class="secondary-button"
+        >
+          Clear Completed
+        </button>
+      </div>
+
+      <section class="task-section">
+        <h2 class="section-title">Tasks</h2>
+
+        <p id="emptyState" class="empty-state">
+          No tasks yet. Add your first task.
+        </p>
+
+        <ul id="taskList" class="task-list"></ul>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>

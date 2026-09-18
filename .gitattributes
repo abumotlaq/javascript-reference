@@ -1,6 +1,8 @@
-# Documentation
 *.md linguist-documentation=true
+*.html linguist-documentation=true
+*.css linguist-documentation=true
+
 docs/** linguist-documentation=true
 
-# JavaScript source
 examples/**/*.js linguist-documentation=false linguist-language=JavaScript linguist-detectable=true
+projects/**/*.js linguist-documentation=false linguist-language=JavaScript linguist-detectable=true

@@ -1,0 +1,200 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta
+    name="description"
+    content="A personal expense tracker built with vanilla JavaScript."
+  >
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <section class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">JavaScript Project</p>
+
+          <h1>Expense Tracker</h1>
+
+          <p class="subtitle">
+            Track income and expenses in one place.
+          </p>
+        </div>
+      </header>
+
+      <section class="summary" aria-label="Financial summary">
+        <article class="summary-card balance-card">
+          <span class="summary-label">Balance</span>
+          <strong id="balance">$0.00</strong>
+        </article>
+
+        <article class="summary-card income-card">
+          <span class="summary-label">Income</span>
+          <strong id="income">$0.00</strong>
+        </article>
+
+        <article class="summary-card expense-card">
+          <span class="summary-label">Expenses</span>
+          <strong id="expenses">$0.00</strong>
+        </article>
+
+        <article class="summary-card">
+          <span class="summary-label">Transactions</span>
+          <strong id="transactionCount">0</strong>
+        </article>
+      </section>
+
+      <section class="form-section">
+        <div class="section-heading">
+          <h2>Add Transaction</h2>
+        </div>
+
+        <form id="transactionForm" class="transaction-form">
+          <div class="field">
+            <label for="description">Description</label>
+
+            <input
+              id="description"
+              name="description"
+              type="text"
+              placeholder="e.g. Grocery shopping"
+              maxlength="100"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="amount">Amount</label>
+
+            <input
+              id="amount"
+              name="amount"
+              type="number"
+              min="0.01"
+              step="0.01"
+              placeholder="0.00"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="type">Type</label>
+
+            <select id="type" name="type">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+
+            <select id="category" name="category">
+              <option value="food">Food</option>
+              <option value="transport">Transport</option>
+              <option value="shopping">Shopping</option>
+              <option value="bills">Bills</option>
+              <option value="entertainment">Entertainment</option>
+              <option value="salary">Salary</option>
+              <option value="freelance">Freelance</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+
+          <div class="field field-full">
+            <label for="date">Date</label>
+
+            <input
+              id="date"
+              name="date"
+              type="date"
+              required
+            >
+          </div>
+
+          <button type="submit" class="primary-button field-full">
+            Add Transaction
+          </button>
+        </form>
+
+        <p
+          id="formError"
+          class="message error-message"
+          role="alert"
+          hidden
+        ></p>
+      </section>
+
+      <section class="transactions-section">
+        <div class="section-heading">
+          <div>
+            <h2>Transactions</h2>
+            <p id="transactionSubtitle">
+              All transactions
+            </p>
+          </div>
+
+          <button
+            id="clearAll"
+            type="button"
+            class="danger-button"
+          >
+            Clear All
+          </button>
+        </div>
+
+        <div
+          class="filters"
+          role="group"
+          aria-label="Transaction filters"
+        >
+          <button
+            type="button"
+            class="filter-button active"
+            data-filter="all"
+          >
+            All
+          </button>
+
+          <button
+            type="button"
+            class="filter-button"
+            data-filter="income"
+          >
+            Income
+          </button>
+
+          <button
+            type="button"
+            class="filter-button"
+            data-filter="expense"
+          >
+            Expenses
+          </button>
+        </div>
+
+        <p
+          id="emptyState"
+          class="empty-state"
+        >
+          No transactions yet.
+        </p>
+
+        <ul
+          id="transactionList"
+          class="transaction-list"
+        ></ul>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
+```

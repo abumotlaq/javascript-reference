@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta
+    name="description"
+    content="A mini e-commerce application built with vanilla JavaScript."
+  >
+  <title>Mini E-Commerce</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-content">
+      <a class="brand" href="#">
+        Mini Store
+      </a>
+
+      <button
+        id="cartButton"
+        type="button"
+        class="cart-button"
+        aria-label="Open shopping cart"
+      >
+        Cart
+        <span id="cartCount" class="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <p class="eyebrow">JavaScript Project</p>
+
+      <h1>Mini E-Commerce</h1>
+
+      <p>
+        Browse products, build your cart, and complete a simulated checkout.
+      </p>
+    </section>
+
+    <section class="catalog-section">
+      <div class="catalog-toolbar">
+        <div class="search-wrapper">
+          <label class="sr-only" for="searchInput">
+            Search products
+          </label>
+
+          <input
+            id="searchInput"
+            type="search"
+            placeholder="Search products..."
+            autocomplete="off"
+          >
+        </div>
+
+        <div class="sort-wrapper">
+          <label class="sr-only" for="sortSelect">
+            Sort products
+          </label>
+
+          <select id="sortSelect">
+            <option value="featured">Featured</option>
+            <option value="name-asc">Name: A-Z</option>
+            <option value="name-desc">Name: Z-A</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        id="categoryFilters"
+        class="category-filters"
+        role="group"
+        aria-label="Product categories"
+      ></div>
+
+      <p
+        id="catalogMessage"
+        class="catalog-message"
+        hidden
+      ></p>
+
+      <div
+        id="productGrid"
+        class="product-grid"
+      ></div>
+    </section>
+  </main>
+
+  <div
+    id="cartOverlay"
+    class="overlay"
+    hidden
+  ></div>
+
+  <aside
+    id="cartPanel"
+    class="cart-panel"
+    aria-labelledby="cartTitle"
+    aria-hidden="true"
+  >
+    <div class="cart-header">
+      <div>
+        <p class="eyebrow">Shopping Cart</p>
+        <h2 id="cartTitle">Your Cart</h2>
+      </div>
+
+      <button
+        id="closeCartButton"
+        type="button"
+        class="icon-button"
+        aria-label="Close cart"
+      >
+        ×
+      </button>
+    </div>
+
+    <div
+      id="cartItems"
+      class="cart-items"
+    ></div>
+
+    <p
+      id="emptyCart"
+      class="empty-cart"
+      hidden
+    >
+      Your cart is empty.
+    </p>
+
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <strong id="subtotal">$0.00</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Shipping</span>
+        <strong id="shipping">$0.00</strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Tax</span>
+        <strong id="tax">$0.00</strong>
+      </div>
+
+      <div class="summary-row total-row">
+        <span>Total</span>
+        <strong id="total">$0.00</strong>
+      </div>
+
+      <button
+        id="checkoutButton"
+        type="button"
+        class="primary-button checkout-button"
+      >
+        Checkout
+      </button>
+    </div>
+  </aside>
+
+  <div
+    id="checkoutModal"
+    class="modal-backdrop"
+    hidden
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="checkoutTitle"
+    >
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Checkout</p>
+          <h2 id="checkoutTitle">Complete Order</h2>
+        </div>
+
+        <button
+          id="closeModalButton"
+          type="button"
+          class="icon-button"
+          aria-label="Close checkout"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="checkoutForm" class="checkout-form">
+        <div class="field">
+          <label for="customerName">Full Name</label>
+
+          <input
+            id="customerName"
+            name="name"
+            type="text"
+            maxlength="100"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="field">
+          <label for="customerEmail">Email</label>
+
+          <input
+            id="customerEmail"
+            name="email"
+            type="email"
+            maxlength="150"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="field field-full">
+          <label for="customerAddress">Address</label>
+
+          <textarea
+            id="customerAddress"
+            name="address"
+            rows="4"
+            maxlength="250"
+            autocomplete="street-address"
+            required
+          ></textarea>
+        </div>
+
+        <p
+          id="checkoutError"
+          class="message error-message field-full"
+          role="alert"
+          hidden
+        ></p>
+
+        <button
+          type="submit"
+          class="primary-button field-full"
+        >
+          Place Order
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div
+    id="toast"
+    class="toast"
+    role="status"
+    aria-live="polite"
+    hidden
+  ></div>
+</body>
+</html>

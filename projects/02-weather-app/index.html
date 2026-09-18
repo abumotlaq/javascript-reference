@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <meta
+    name="description"
+    content="A weather application built with vanilla JavaScript."
+  >
+  <title>Weather App</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <main class="container">
+    <section class="app">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">JavaScript Project</p>
+
+          <h1>Weather App</h1>
+
+          <p class="subtitle">
+            Search for a location or use your current position.
+          </p>
+        </div>
+      </header>
+
+      <section class="search-section" aria-labelledby="search-title">
+        <h2 id="search-title" class="sr-only">
+          Search for a location
+        </h2>
+
+        <form id="searchForm" class="search-form">
+          <label class="sr-only" for="cityInput">
+            City name
+          </label>
+
+          <input
+            id="cityInput"
+            name="city"
+            type="search"
+            placeholder="Search for a city..."
+            autocomplete="off"
+            required
+          >
+
+          <button type="submit" class="primary-button">
+            Search
+          </button>
+
+          <button
+            id="locationButton"
+            type="button"
+            class="secondary-button"
+          >
+            Use My Location
+          </button>
+        </form>
+
+        <p
+          id="searchError"
+          class="message error-message"
+          role="alert"
+          hidden
+        ></p>
+      </section>
+
+      <section
+        id="statusMessage"
+        class="message status-message"
+        aria-live="polite"
+        hidden
+      ></section>
+
+      <section
+        id="weatherSection"
+        class="weather-section"
+        aria-live="polite"
+        hidden
+      >
+        <header class="location-header">
+          <div>
+            <p class="location-label">Current location</p>
+
+            <h2 id="locationName">-</h2>
+
+            <p id="locationDetails" class="location-details">
+              -
+            </p>
+          </div>
+
+          <button
+            id="refreshButton"
+            type="button"
+            class="icon-button"
+            aria-label="Refresh weather"
+            title="Refresh weather"
+          >
+            ↻
+          </button>
+        </header>
+
+        <div class="current-weather">
+          <div class="current-summary">
+            <span id="weatherIcon" class="weather-icon" aria-hidden="true">
+              -
+            </span>
+
+            <div>
+              <p id="weatherDescription" class="weather-description">
+                -
+              </p>
+
+              <div class="temperature-row">
+                <span id="currentTemperature" class="current-temperature">
+                  -
+                </span>
+
+                <span class="temperature-unit">°C</span>
+              </div>
+
+              <p id="feelsLike" class="feels-like">
+                Feels like -
+              </p>
+            </div>
+          </div>
+
+          <div class="weather-details">
+            <div class="detail-card">
+              <span class="detail-label">Humidity</span>
+              <strong id="humidity">-</strong>
+            </div>
+
+            <div class="detail-card">
+              <span class="detail-label">Wind</span>
+              <strong id="windSpeed">-</strong>
+            </div>
+
+            <div class="detail-card">
+              <span class="detail-label">Precipitation</span>
+              <strong id="precipitation">-</strong>
+            </div>
+          </div>
+        </div>
+
+        <section class="forecast-section">
+          <div class="section-heading">
+            <h3>Forecast</h3>
+            <span id="forecastUpdated" class="updated-time">
+              -
+            </span>
+          </div>
+
+          <div id="forecastList" class="forecast-list"></div>
+        </section>
+
+        <footer class="app-footer">
+          <span>Weather data by Open-Meteo.com</span>
+        </footer>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
